@@ -10,6 +10,7 @@
 
 #include "xerxes.h"
 #include "opcodes.h"
+#include <vector>
 
 
 static VcFunctionDecl _libfuncs[NUM_LIBFUNCS] = {
@@ -297,13 +298,12 @@ static VcFunctionDecl _libfuncs[NUM_LIBFUNCS] = {
 	{"5", "HookMapLoad", "8" }   // kdf (2011-01-10)
 };
 
-VcFunction *libfuncs;
+std::vector<VcFunction> libfuncs;
 
 void vc_initBuiltins() {
-	//maybe inefficient to call this many default constructors? but who cares
-	libfuncs = new VcFunction[NUM_LIBFUNCS];
+	libfuncs.reserve(NUM_LIBFUNCS);
 	for(int i=0;i<NUM_LIBFUNCS;i++)
-		new(&libfuncs[i])VcFunction(_libfuncs[i]);
+		libfuncs.emplace_back(_libfuncs[i]);
 }
 
 char* libvars[NUM_HVARS][3] = {
